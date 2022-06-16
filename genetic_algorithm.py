@@ -5,11 +5,11 @@ import time
 
 # print('foi')
 
-NUMBER_OF_ENTRIES = 9
+NUMBER_OF_ENTRIES = 8
 NUMBER_EXPECTED = 2 
 #MAX_VALUE = -1  # maximun value
 MAX_RUNS = 6  # number maximun of executin
-CUT_NUMBER = int(NUMBER_OF_ENTRIES/2)  # numero de corte para gerar nova populacao
+CUT_NUMBER = 4  # numero de corte para gerar nova populacao
 # class Rules:
 
 #     def __init__(self):
@@ -221,7 +221,6 @@ def create_new_population(object_with_weighting, amount, direction):
     return children
 
 def __step_seven(step_six):
-    #number = CUT_NUMBER
     object_with_weighting = __add_weighting(step_six)
     amount, direction = sort_number_of_chromosomes()
     new_population = create_new_population(object_with_weighting, amount, direction) 
@@ -230,9 +229,6 @@ def __step_seven(step_six):
     print('X | Y | Cromossomo | f(x,y) | Ponderação')
     for ff in new_population:
         print(ff.print_yes_weighting())
-    # while number >= 0:
-    #     new_object_of_table.append
-    #     number = number - 1
     return new_population
 
 
