@@ -5,11 +5,11 @@ import time
 
 # print('foi')
 
-NUMBER_OF_ENTRIES = 8
+NUMBER_OF_ENTRIES = 9
 NUMBER_EXPECTED = 2 
 #MAX_VALUE = -1  # maximun value
 MAX_RUNS = 6  # number maximun of executin
-CUT_NUMBER = NUMBER_OF_ENTRIES/2  # numero de corte para gerar nova populacao
+CUT_NUMBER = int(NUMBER_OF_ENTRIES/2)  # numero de corte para gerar nova populacao
 # class Rules:
 
 #     def __init__(self):
@@ -69,23 +69,23 @@ def function(point_x, point_y):
     return 2 - ((point_x-2)**2) - ((point_y-3)**2)
 
 
-def __stap_two():
+def __step_two():
     print('\n passo 2')
-    stap_two = []
+    step_two = []
     for var in range(NUMBER_OF_ENTRIES):
         obj = []
         obj.append(str(var))
         obj.append(convert_integer_to_binary(var).rjust(3, '0'))
-        stap_two.append(obj)
+        step_two.append(obj)
     print('Decimal | Binario')
-    for obj in stap_two:
+    for obj in step_two:
         print(obj)
 
 
-def __stap_three():
+def __step_three():
     points_history = ''
-    stap_three = []
-    while len(stap_three) < 10:
+    step_three = []
+    while len(step_three) < 10:
         obj = []
         point_x = randint(0, NUMBER_OF_ENTRIES - 1)
         point_y = randint(0, NUMBER_OF_ENTRIES - 1)
@@ -99,53 +99,53 @@ def __stap_three():
         obj.append(point_y)
         obj.append(convert_integer_to_binary(point_x).rjust(
             3, '0') + convert_integer_to_binary(point_y).rjust(3, '0'))
-        stap_three.append(obj)
+        step_three.append(obj)
 
     print('\n passo 3')
     print('X | Y | Cromossomo')
-    for obj in stap_three:
+    for obj in step_three:
         print(obj)
-    return stap_three
+    return step_three
 
 
-def __stap_four(object_of_table):
-    stap_four = []
-    for obj_stap_three in object_of_table:
-        obj_stap_three.append(function(obj_stap_three[0], obj_stap_three[1]))
-        obj = objects(obj_stap_three[0], obj_stap_three[1],
-                      obj_stap_three[2], obj_stap_three[3])
-        stap_four.append(obj)
+def __step_four(object_of_table):
+    step_four = []
+    for obj_step_three in object_of_table:
+        obj_step_three.append(function(obj_step_three[0], obj_step_three[1]))
+        obj = objects(obj_step_three[0], obj_step_three[1],
+                      obj_step_three[2], obj_step_three[3])
+        step_four.append(obj)
 
     print('\n passo 4')
     print('X | Y | Cromossomo | f(x,y)')
-    for obj in stap_four:
+    for obj in step_four:
         print(obj.print_not_weighting())
-    return stap_four
+    return step_four
 
 
-def __stap_five(stap_four):
-    stap_five = sorted(stap_four, key=objects.get_fun, reverse=True)
+def __step_five(step_four):
+    step_five = sorted(step_four, key=objects.get_fun, reverse=True)
     print('\n passo 5')
-    for obj in stap_five:
+    for obj in step_five:
         print(obj.print_not_weighting())
-    return stap_five
+    return step_five
 
 
-def __stap_six(stap_five):
-    stap_six = stap_five[0:int(CUT_NUMBER)]
+def __step_six(step_five):
+    step_six = step_five[0:int(CUT_NUMBER)]
     print('\n passo 6')
-    for obj in stap_six:
+    for obj in step_six:
         print(obj.print_not_weighting())
-    return stap_six
+    return step_six
 
 
-def __add_weighting(stap_six):
+def __add_weighting(step_six):
     number = 0
     new_object_of_table = []
     while number < CUT_NUMBER:
         # set attribute set_weighting from object with number of weighting
-        stap_six[number].set_weighting(int(CUT_NUMBER - number))
-        new_object_of_table.append(stap_six[number])
+        step_six[number].set_weighting(int(CUT_NUMBER - number))
+        new_object_of_table.append(step_six[number])
         number = number + 1
     print('\n passo 7')
     print('X | Y | Cromossomo | f(x,y) | Ponderação')
@@ -220,9 +220,9 @@ def create_new_population(object_with_weighting, amount, direction):
         children = children + replicate_population(individual, amount, direction)
     return children
 
-def __stap_seven(stap_six):
+def __step_seven(step_six):
     #number = CUT_NUMBER
-    object_with_weighting = __add_weighting(stap_six)
+    object_with_weighting = __add_weighting(step_six)
     amount, direction = sort_number_of_chromosomes()
     new_population = create_new_population(object_with_weighting, amount, direction) 
     
@@ -237,7 +237,7 @@ def __stap_seven(stap_six):
 
 
 
-def __stap_nine(stap_seven, account_runs):
+def __step_nine(step_seven, account_runs):
 
     if not (account_runs - 1) % 5 == 0:
         return
@@ -255,7 +255,7 @@ def __stap_nine(stap_seven, account_runs):
     #     print(ff)
 
     for position in individual_position:
-        individual = stap_seven[int(position)]
+        individual = step_seven[int(position)]
         chromosome = individual.get_chromosome()
         num = randint(0, 5)
         #print('chromosome', int(position) + 1 , 'gene',num +1)
@@ -273,39 +273,39 @@ def __stap_nine(stap_seven, account_runs):
 
     print('\n passo 9')
     print('X | Y | Cromossomo | f(x,y) | Ponderação')
-    for ff in stap_seven:
+    for ff in step_seven:
         print(ff.print_yes_weighting())
 
 
-def __stap_ten(stap_seven):
-    for individual in stap_seven:
+def __step_ten(step_seven):
+    for individual in step_seven:
         individual.convert_chromosome()
 
     print('\n passo 10')
     print('X | Y | Cromossomo | f(x,y) | Ponderação')
-    for ff in stap_seven:
+    for ff in step_seven:
         print(ff.print_yes_weighting())
 
-def __stap_eleven(stap_seven):
-    for individual in stap_seven:
+def __step_eleven(step_seven):
+    for individual in step_seven:
         individual.set_fun(function(individual.get_point_x(), individual.get_point_y()))
     
-    stap_eleven = sorted(stap_seven, key=objects.get_fun, reverse=True)
-    for ff in stap_eleven:
+    step_eleven = sorted(step_seven, key=objects.get_fun, reverse=True)
+    for ff in step_eleven:
         ff.set_weighting(0)
 
     print('\n passo 11')
     print('X | Y | Cromossomo | f(x,y)')
-    for ff in stap_eleven:
+    for ff in step_eleven:
         print(ff.print_not_weighting())
-    return stap_eleven
+    return step_eleven
 
-# stapTwo
-__stap_two()
-# stapThree
-stap_three = __stap_three()
- # stapFour
-stap_four = __stap_four(stap_three)
+# stepTwo
+__step_two()
+# stepThree
+step_three = __step_three()
+ # stepFour
+step_four = __step_four(step_three)
 
 account_runs = 0
 function_value = 0
@@ -313,20 +313,20 @@ function_value = 0
 while account_runs < MAX_RUNS:
     account_runs = account_runs + 1
    
-    # stapFive
-    stap_five = __stap_five(stap_four)
-    # stapSix
-    stap_six = __stap_six(stap_five)
-    # stapSeven
-    stap_seven = __stap_seven(stap_six)
-    # stap_nine
-    __stap_nine(stap_seven, account_runs)
-    # stap_ten
-    stap_ten = __stap_ten(stap_seven)
-    # stap_eleven
-    stap_eleven = __stap_eleven(stap_seven)
+    # stepFive
+    step_five = __step_five(step_four)
+    # stepSix
+    step_six = __step_six(step_five)
+    # stepSeven
+    step_seven = __step_seven(step_six)
+    # step_nine
+    __step_nine(step_seven, account_runs)
+    # step_ten
+    step_ten = __step_ten(step_seven)
+    # step_eleven
+    step_eleven = __step_eleven(step_seven)
 
-    function_value = stap_eleven[0].get_fun()
+    function_value = step_eleven[0].get_fun()
     if function_value == NUMBER_EXPECTED:
         break
 
