@@ -6,8 +6,9 @@ import time
 # print('foi')
 
 NUMBER_OF_ENTRIES = 8
-MAX_VALUE = -1  # maximun value
-MAX_RUNS = 10  # number maximun of executin
+NUMBER_EXPECTED = 2 
+#MAX_VALUE = -1  # maximun value
+MAX_RUNS = 6  # number maximun of executin
 CUT_NUMBER = NUMBER_OF_ENTRIES/2  # numero de corte para gerar nova populacao
 # class Rules:
 
@@ -220,7 +221,7 @@ def create_new_population(object_with_weighting, amount, direction):
     return children
 
 def __stap_seven(stap_six):
-    number = CUT_NUMBER
+    #number = CUT_NUMBER
     object_with_weighting = __add_weighting(stap_six)
     amount, direction = sort_number_of_chromosomes()
     new_population = create_new_population(object_with_weighting, amount, direction) 
@@ -236,7 +237,10 @@ def __stap_seven(stap_six):
 
 
 
-def __stap_nine(stap_seven):
+def __stap_nine(stap_seven, account_runs):
+
+    if not (account_runs - 1) % 5 == 0:
+        return
 
     individual_position = []
     while True:
@@ -254,7 +258,7 @@ def __stap_nine(stap_seven):
         individual = stap_seven[int(position)]
         chromosome = individual.get_chromosome()
         num = randint(0, 5)
-        print('chromosome', int(position) + 1 , 'gene',num +1)
+        #print('chromosome', int(position) + 1 , 'gene',num +1)
         #print('num',num)
         chromosome_changed_pre = chromosome[0:num]
         chromosome_changed_pos = chromosome[num + 1:len(chromosome)]
@@ -263,7 +267,7 @@ def __stap_nine(stap_seven):
             chromosome_unchanged = '0'
         else:
             chromosome_unchanged = '1'
-        print('chromosome_changed_pre', chromosome_changed_pre , 'chromosome_unchanged',chromosome_unchanged, 'chromosome_changed_pos',chromosome_changed_pos)
+        #print('chromosome_changed_pre', chromosome_changed_pre , 'chromosome_unchanged',chromosome_unchanged, 'chromosome_changed_pos',chromosome_changed_pos)
         
         individual.set_chromosome(chromosome_changed_pre + chromosome_unchanged + chromosome_changed_pos)
 
@@ -285,33 +289,46 @@ def __stap_ten(stap_seven):
 def __stap_eleven(stap_seven):
     for individual in stap_seven:
         individual.set_fun(function(individual.get_point_x(), individual.get_point_y()))
+    
+    stap_eleven = sorted(stap_seven, key=objects.get_fun, reverse=True)
+    for ff in stap_eleven:
+        ff.set_weighting(0)
 
     print('\n passo 11')
-    print('X | Y | Cromossomo | f(x,y) | Ponderação')
-    for ff in stap_seven:
-        print(ff.print_yes_weighting())
+    print('X | Y | Cromossomo | f(x,y)')
+    for ff in stap_eleven:
+        print(ff.print_not_weighting())
+    return stap_eleven
 
 # stapTwo
 __stap_two()
 # stapThree
 stap_three = __stap_three()
-object_of_table = stap_three
-#runs = 0
-# while MAX_VALUE < 2 or runs == MAX_RUNS:
-# stapFour
-stap_four = __stap_four(object_of_table)
-# stapFive
-stap_five = __stap_five(stap_four)
-# stapSix
-stap_six = __stap_six(stap_five)
-# add weighting in objects
-# __add_weighting(stap_six)
-# stapSeven
-stap_seven = __stap_seven(stap_six)
-# sort number of chromosomes for mutation
-__stap_nine(stap_seven)
+ # stapFour
+stap_four = __stap_four(stap_three)
 
-stap_ten = __stap_ten(stap_seven)
+account_runs = 0
+function_value = 0
 
-stap_eleven = __stap_eleven(stap_seven)
-# print(MAX_VALUE)
+while account_runs < MAX_RUNS:
+    account_runs = account_runs + 1
+   
+    # stapFive
+    stap_five = __stap_five(stap_four)
+    # stapSix
+    stap_six = __stap_six(stap_five)
+    # stapSeven
+    stap_seven = __stap_seven(stap_six)
+    # stap_nine
+    __stap_nine(stap_seven, account_runs)
+    # stap_ten
+    stap_ten = __stap_ten(stap_seven)
+    # stap_eleven
+    stap_eleven = __stap_eleven(stap_seven)
+
+    function_value = stap_eleven[0].get_fun()
+    if function_value == NUMBER_EXPECTED:
+        break
+
+print('finalizado com ', account_runs, ' épocas e valor da função encontrado ', function_value)
+
