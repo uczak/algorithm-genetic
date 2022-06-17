@@ -235,8 +235,8 @@ def __step_seven(step_six):
 
 def __step_nine(step_seven, account_runs):
 
-    if not (account_runs - 1) % 5 == 0:
-        return
+    #if not (account_runs - 1) % 5 == 0:
+    #    return
 
     individual_position = []
     while True:
